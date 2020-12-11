@@ -1,7 +1,8 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.shortcuts import render
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 
 from .models import Post
 
@@ -17,14 +18,39 @@ def index(request):
 class PostListView(ListView):
     paginate_by = 4
     model = Post
+    # Receiving UnorderedObjectListWarning before overriding the queryset
+    queryset = Post.objects.order_by('-timestamp')
     template_name = '../templates/blog.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['recent_posts'] = Post.objects.order_by('-timestamp')[:3]
         context['category_count'] = get_category_count()
-        print(context['category_count'])
         return context
 
-def post(request, slug):
-    return render(request, 'post.html')
+class PostDetailView(DetailView):
+    model = Post
+    template_name = '../templates/post.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['recent_posts'] = Post.objects.order_by('-timestamp')[:3]
+        context['category_count'] = get_category_count()
+        return context
+
+class SearchView(ListView):
+    paginate_by = 10
+    model = Post
+    template_name = '../templates/search_results.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['recent_posts'] = Post.objects.order_by('-timestamp')[:3]
+        context['category_count'] = get_category_count()
+        return context
+
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        return Post.objects.filter(
+            Q(title__icontains=query) | Q(overview__icontains=query) | Q(categories__title__icontains=query)
+        ).distinct()

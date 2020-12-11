@@ -1,15 +1,16 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from posts.views import index, post, PostListView
+from filebrowser.sites import site
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index, name='index'),
-    path('blog/', PostListView.as_view(), name='blog'),
-    path('post/<slug:slug>', post, name='post'),
+    path('', include('posts.urls')),
+    path('tinymce/', include('tinymce.urls')),
+    path('admin/filebrowser/', site.urls),
+    path('grappelli/', include('grappelli.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from tinymce.models import HTMLField
 
 User = get_user_model()
 
@@ -21,6 +22,7 @@ class Post(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField()
     overview = models.TextField()
+    content = HTMLField()
     timestamp = models.DateTimeField(auto_now_add=True)
     comment = models.IntegerField(default=0)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
