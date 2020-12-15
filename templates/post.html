@@ -16,6 +16,12 @@
                         <div class="category"><a href="#">{{ category }}</a></div>
                     {% endfor %}
                 </div>
+                {% if user.is_authenticated %}
+                    <div class="">
+                        <a href="{% url 'post-update' post.slug %}" class="text-small">Update</a>
+                        <a href="{% url 'post-delete' post.slug %}" class="text-small">Delete</a>
+                    </div>
+                {% endif %}
                 <h1>{{ post.title }}<a href="#"><i class="fa fa-bookmark-o"></i></a></h1>
                 <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#" class="author d-flex align-items-center flex-wrap">
                     <div class="avatar"><img src="{{ post.author.profile_picture.url }}" alt="..." class="img-fluid"></div>

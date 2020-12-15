@@ -24,7 +24,6 @@ class Post(models.Model):
     overview = models.TextField()
     content = HTMLField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    comment = models.IntegerField(default=0)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     thumbnail = models.ImageField()
     categories = models.ManyToManyField(Category)
@@ -35,3 +34,13 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return f'/post/{self.slug}'
+
+    def get_update_url(self):
+        return reverse('post-update', kwargs={
+            'slug': self.slug
+        })
+
+    def get_delete_url(self):
+        return reverse('post-delete', kwargs={
+            'slug': self.slug
+        })

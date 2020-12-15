@@ -1,19 +1,14 @@
 from django import forms
-from tinymce import TinyMCE
-from .models import _your_model_
-
-
-class TinyMCEWidget(TinyMCE):
-    def use_required_attribute(self, *args):
-        return False
+from tinymce.widgets import TinyMCE
+from .models import Post
 
 
 class PostForm(forms.ModelForm):
     content = forms.CharField(
-        widget=TinyMCEWidget(
-            attrs={'required': False, 'cols': 80, 'rows': 30}
+        widget=TinyMCE(
+            attrs={'cols': 80, 'rows': 30}
         )
     )
     class Meta:
-        model = _your_model_
-        fields = '__all__'
+        model = Post
+        exclude = ['timestamp']

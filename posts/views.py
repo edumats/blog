@@ -1,10 +1,14 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.urls import reverse_lazy
 from django.db.models import Count, Q
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView, DeleteView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Post
+from .forms import PostForm
 
 def get_category_count():
     queryset = Post.objects.values('categories__title').annotate(Count('categories__title'))
@@ -37,6 +41,22 @@ class PostDetailView(DetailView):
         context['recent_posts'] = Post.objects.order_by('-timestamp')[:3]
         context['category_count'] = get_category_count()
         return context
+
+class PostUpdateView(LoginRequiredMixin, UpdateView):
+    model = Post
+    fields = '__all__'
+    template_name = '../templates/post_update_form.html'
+
+class PostDeleteView(LoginRequiredMixin, DeleteView):
+    model = Post
+    template_name = '../templates/post_delete_form.html'
+    success_url = reverse_lazy('author-list')
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    #form_class = PostForm
+    fields = '__all__'
+    template_name = '../templates/post_create_form.html'
 
 class SearchView(ListView):
     paginate_by = 10

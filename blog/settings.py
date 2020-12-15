@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'tinymce',
     'grappelli',
     'filebrowser',
-
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +154,6 @@ TINYMCE_DEFAULT_CONFIG = {
 # For disqus
 DISQUS_API_KEY = os.environ.get('DISQUS_API_KEY')
 DISQUS_WEBSITE_SHORTNAME = os.environ.get('DISQUS_WEBSITE_SHORTNAME')
+
+# For crispy formats
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

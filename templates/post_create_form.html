@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    <div class="container">
+      <div class="row">
+        <!-- Content -->
+        <main class="post blog-post col-lg-8">
+          <div class="container">
+            <div class="post-single">
+              <div class="post-details">
+                <h1>Create a post</h1>
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <input type="submit" name="" value="Create">
+                </form>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+{% endblock %}
