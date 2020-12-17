@@ -20,17 +20,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'grappelli',
+    'filebrowser',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'posts',
-    'marketing',
+    'posts.apps.PostsConfig',
+    'marketing.apps.MarketingConfig',
     'tinymce',
-    'grappelli',
-    'filebrowser',
     'crispy_forms',
 ]
 
@@ -134,7 +134,7 @@ TINYMCE_DEFAULT_CONFIG = {
             table code lists fullscreen  insertdatetime  nonbreaking
             contextmenu directionality searchreplace wordcount visualblocks
             visualchars code fullscreen autolink lists  charmap print  hr
-            anchor pagebreak
+            anchor pagebreak spellchecker
             ''',
     'toolbar1': '''
             fullscreen preview bold italic underline | fontselect,
@@ -151,9 +151,16 @@ TINYMCE_DEFAULT_CONFIG = {
     'statusbar': True,
 }
 
+TINYMCE_SPELLCHECKER = True
+#TINYMCE_COMPRESSOR = True
+
 # For disqus
 DISQUS_API_KEY = os.environ.get('DISQUS_API_KEY')
 DISQUS_WEBSITE_SHORTNAME = os.environ.get('DISQUS_WEBSITE_SHORTNAME')
 
 # For crispy formats
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# For django file browser
+FILEBROWSER_DIRECTORY = ''
+DIRECTORY = ''

@@ -4,6 +4,7 @@
 
 
 {% block content %}
+    {{ form.media }}
     <div class="container">
       <div class="row">
         <!-- Content -->
@@ -12,9 +13,9 @@
             <div class="post-single">
               <div class="post-details">
                 <h1>Create a post</h1>
-                
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
+                    
                     {{ form|crispy }}
                     <input type="submit" name="" value="Create">
                 </form>

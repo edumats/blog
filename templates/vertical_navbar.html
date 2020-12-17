@@ -23,8 +23,9 @@
                     <div class="image"><img src="{{ post.thumbnail.url }}" alt="..." class="img-fluid"></div>
                     <div class="title"><strong>{{ post.title }}</strong>
                         <div class="d-flex align-items-center">
-                            <div class="views"><i class="icon-eye"></i> 500</div>
-                            <div class="comments"><i class="icon-comment"></i>{{ post.comment }}</div>
+                            <div class="comments">
+                                <a class="d-inline" href="{{ post.get_absolute_url }}#disqus_thread" data-disqus-identifier="{{ post.get_absolute_url }}"></a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -41,19 +42,6 @@
                 <a href="#">{{ category.categories__title}}</a><span>{{ category.categories__title__count}}</span>
             </div>
         {% endfor %}
-    </div>
-    <!-- Widget [Tags Cloud Widget]-->
-    <div class="widget tags">
-        <header>
-            <h3 class="h6">Tags</h3>
-        </header>
-        <ul class="list-inline">
-          <li class="list-inline-item"><a href="#" class="tag">#Business</a></li>
-          <li class="list-inline-item"><a href="#" class="tag">#Technology</a></li>
-          <li class="list-inline-item"><a href="#" class="tag">#Fashion</a></li>
-          <li class="list-inline-item"><a href="#" class="tag">#Sports</a></li>
-          <li class="list-inline-item"><a href="#" class="tag">#Economy</a></li>
-        </ul>
     </div>
 </div>
 </aside>

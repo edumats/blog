@@ -15,7 +15,7 @@ def get_category_count():
     return queryset
 
 def index(request):
-    posts = Post.objects.filter(featured=True)
+    posts = Post.objects.filter(featured=True)[:3]
     latest_posts = Post.objects.order_by('-timestamp')[:3]
     return render(request, 'index.html', {'posts': posts, 'latest_posts': latest_posts})
 
@@ -54,8 +54,8 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    #form_class = PostForm
-    fields = '__all__'
+    form_class = PostForm
+    #fields = '__all__'
     template_name = '../templates/post_create_form.html'
 
 class SearchView(ListView):

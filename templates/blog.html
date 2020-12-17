@@ -24,12 +24,11 @@
                         <a href="{{ post.get_absolute_url }}">
                             <h3 class="h4">{{ post.title }}</h3>
                         </a>
-                        <p class="text-muted">{{ post.overview }}</p>
-                        <footer class="post-footer d-flex align-items-center"><a href="#" class="author d-flex align-items-center flex-wrap">
-                            <div class="avatar"><img src="{{ post.author.profile_picture.url }}" alt="..." class="img-fluid"></div>
-                            <div class="title"><span>{{ post.author }}</span></div></a>
+                        <p class="text-muted">{{ post.overview | safe }}</p>
+                        <footer class="post-footer d-flex align-items-center">
                             <div class="date"><i class="icon-clock"></i>{{ post.timestamp|timesince }}</div>
-                            <div class="comments meta-last"><i class="icon-comment"></i>{{ post.comment }}</div>
+                            <div class="comments meta-last"><i class="icon-comment"></i><a href="{{ post.get_absolute_url }}#disqus_thread" data-disqus-identifier="{{ post.get_absolute_url }}"></a></div>
+                            
                         </footer>
                     </div>
                 </div>
@@ -59,4 +58,5 @@
     </div>
 </div>
 </div>
+<script id="dsq-count-scr" src="//dumats.disqus.com/count.js" async></script>
 {% endblock %}
