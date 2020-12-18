@@ -2,6 +2,10 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block meta%}
+  <meta name="robots" content="noindex" />
+{% endblock%}
+
 {% block title %}Update Post{% endblock %}
 {% block content %}
     <div class="container">

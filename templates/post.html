@@ -1,12 +1,10 @@
 {% extends 'layout.html' %}
 {% load static %}
 
-{% block title %} 
-  {{ post.title }} 
-{% endblock %}
-{% block description %}
-  {{ post.overview }}
-{% endblock %}
+{% block title %} {{ post.title }} {% endblock %}
+
+{% block meta_description %} {{ post.description|safe }} {% endblock %}
+
 {% block content %}
     <div class="container">
       <div class="row">

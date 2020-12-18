@@ -25,7 +25,7 @@
                         <a href="{{ post.get_absolute_url }}">
                             <h3 class="h4">{{ post.title }}</h3>
                         </a>
-                        <p class="text-muted">{{ post.overview | safe }}</p>
+                        <p class="text-muted">{{ post.description | safe }}</p>
                         <footer class="post-footer d-flex align-items-center">
                             <div class="date"><i class="icon-clock"></i>{{ post.timestamp|timesince }}</div>
                             <div class="comments meta-last"><i class="icon-comment"></i><a href="{{ post.get_absolute_url }}#disqus_thread" data-disqus-identifier="{{ post.get_absolute_url }}"></a></div>

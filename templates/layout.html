@@ -3,11 +3,13 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
     <head>
+        {% block meta %}{% endblock %}
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="description" content="{% block description %}{% endblock %}">
+        <meta name="description" content="{% block meta_description %}{% endblock %}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="all,follow">
+        
         <!-- Bootstrap CSS-->
         <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
         <!-- Font Awesome CSS-->
@@ -24,6 +26,7 @@
         <link rel="stylesheet" href="{% static 'css/custom.css' %}">
         <!-- Favicon-->
         <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+        {{ form.media }}
         <title>{% block title %}{% endblock %} | Blog</title>
     </head>
     

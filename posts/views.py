@@ -55,7 +55,6 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
-    #fields = '__all__'
     template_name = '../templates/post_create_form.html'
 
 class SearchView(ListView):

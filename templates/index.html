@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
-{% block title %}Home{% endblock %}
+{% block title %}Bootstrap Blog{% endblock %}
 
 {% block content %}
     <!-- Hero Section-->
@@ -43,7 +43,7 @@
                       </div><a href="{{ post.get_absolute_url }}">
                         <h2 class="h4">{{ post.title }}</h2></a>
                     </header>
-                    <p>{{ post.overview|safe }}</p>
+                    <p>{{ post.description|safe }}</p>
                     <footer class="post-footer d-flex align-items-center">
                       <a href="#" class="author d-flex align-items-center flex-wrap">
                         <div class="avatar"><img src="{{ post.author.profile_picture.url }}" alt="..." class="img-fluid"></div>
@@ -73,18 +73,18 @@
         <div class="row">
             {% for latest_post in latest_posts %}
                 <div class="post col-md-4">
-                    <div class="post-thumbnail"><a href="#"><img src="{{ latest_post.thumbnail.url }}" alt="..." class="img-fluid"></a></div>
+                    <div class="post-thumbnail"><a href="{{ latest_post.get_absolute_url }}"><img src="{{ latest_post.thumbnail.url }}" alt="..." class="img-fluid"></a></div>
                     <div class="post-details">
-                    <div class="post-meta d-flex justify-content-between">
-                    <div class="date">{{ latest_post.timestamp|date:"j M | Y" }}</div>
-                    <div class="category">
-                        {% for category in latest_post.category.all %}
-                            <a href="#">{{ category }}</a>
-                        {% endfor %}
-                    </div>
-                    </div><a href="post.html">
-                    <h3 class="h4">{{ latest_post.title }}</h3></a>
-                    <p class="text-muted">{{ latest_post.overview|safe }}</p>
+                      <div class="post-meta d-flex justify-content-between">
+                        <div class="date">{{ latest_post.timestamp|date:"j M | Y" }}</div>
+                        <div class="category">
+                            {% for category in latest_post.categories.all %}
+                                <a href="{{ category.get_absolute_url }}">{{ category }}</a>
+                            {% endfor %}
+                        </div>
+                      </div><a href="{{ latest_post.get_absolute_url }}">
+                      <h3 class="h4">{{ latest_post.title }}</h3></a>
+                      <p class="text-muted">{{ latest_post.description|safe }}</p>
                     </div>
                 </div>
             {% endfor %}

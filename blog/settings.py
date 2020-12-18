@@ -30,6 +30,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'posts.apps.PostsConfig',
     'marketing.apps.MarketingConfig',
+
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'tinymce',
     'crispy_forms',
 ]
@@ -168,3 +171,6 @@ DIRECTORY = ''
 # Redirect to home URL after login/logout (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
+
+# For django.contrib.sites
+SITE_ID = 1

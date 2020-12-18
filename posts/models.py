@@ -22,12 +22,16 @@ class Category(models.Model):
         return reverse('category_list', kwargs={
             'category': self.title
         })
+    
+    class Meta:
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
 
 class Post(models.Model):
     # This title is used for page title and is limited to 60 chracters for better SEO
     title = models.CharField(max_length=60, help_text='Try placing important keywords first')
     slug = models.SlugField()
-    overview = models.TextField()
+    description = models.CharField(max_length=160, help_text='Description of your post')
     content = HTMLField()
     timestamp = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
@@ -39,7 +43,9 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return f'/post/{self.slug}'
+        return reverse('post', kwargs={
+            'slug': self.slug
+        })
 
     def get_update_url(self):
         return reverse('post-update', kwargs={
