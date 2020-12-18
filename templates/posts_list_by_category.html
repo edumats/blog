@@ -1,25 +1,40 @@
 {% extends 'layout.html' %}
 {% load static %}
 
-{% block title %}Search Results{% endblock %}
+{% block title %}{{ category }} | Category{% endblock %}
 {% block content %}
 <div class="container">
     <div class="row">
     <!-- Latest Posts -->
     <main class="posts-listing col-lg-8">
         <div class="container">
-
-        <!-- Search Results -->
-        <header>
-            <h2>Search Results</h2>
-        </header>
-        <ul>
+        <div class="row">
+            <!-- post -->
             {% for post in post_list %}
-                <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+                <div class="post col-xl-6">
+                    <div class="post-thumbnail"><a href="{{ post.get_absolute_url }}"><img src="{{ post.thumbnail.url }}" alt="..." class="img-fluid"></a></div>
+                    <div class="post-details">
+                        <div class="post-meta d-flex justify-content-between">
+                            <div class="date meta-last">{{ post.timestamp|date:"j M | Y"}}</div>
+                            <div class="category">
+                                {% for category in post.categories.all %}
+                                    <a href="{{ category.get_absolute_url }}">{{ category }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <a href="{{ post.get_absolute_url }}">
+                            <h3 class="h4">{{ post.title }}</h3>
+                        </a>
+                        <p class="text-muted">{{ post.overview | safe }}</p>
+                        <footer class="post-footer d-flex align-items-center">
+                            <div class="date"><i class="icon-clock"></i>{{ post.timestamp|timesince }}</div>
+                            <div class="comments meta-last"><i class="icon-comment"></i><a href="{{ post.get_absolute_url }}#disqus_thread" data-disqus-identifier="{{ post.get_absolute_url }}"></a></div>
+                            
+                        </footer>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
-
-
+        </div>
         <!-- Pagination -->
         <nav class="pagination">
             <ul class="step-links pagination pagination-template d-flex justify-content-center">
@@ -43,4 +58,6 @@
     {% include "vertical_navbar.html" %}
     </div>
 </div>
+</div>
+<script id="dsq-count-scr" src="//dumats.disqus.com/count.js" async></script>
 {% endblock %}

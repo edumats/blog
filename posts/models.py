@@ -18,8 +18,14 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('category_list', kwargs={
+            'category': self.title
+        })
+
 class Post(models.Model):
-    title = models.CharField(max_length=100)
+    # This title is used for page title and is limited to 60 chracters for better SEO
+    title = models.CharField(max_length=60, help_text='Try placing important keywords first')
     slug = models.SlugField()
     overview = models.TextField()
     content = HTMLField()

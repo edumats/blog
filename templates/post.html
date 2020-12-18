@@ -1,7 +1,12 @@
 {% extends 'layout.html' %}
 {% load static %}
 
-
+{% block title %} 
+  {{ post.title }} 
+{% endblock %}
+{% block description %}
+  {{ post.overview }}
+{% endblock %}
 {% block content %}
     <div class="container">
       <div class="row">
@@ -13,7 +18,7 @@
               <div class="post-details">
                 <div class="post-meta d-flex justify-content-between">
                     {% for category in post.categories.all %}
-                        <div class="category"><a href="#">{{ category }}</a></div>
+                        <div class="category"><a href="{% url 'category_list' category %}">{{ category }}</a></div>
                     {% endfor %}
                 </div>
                 {% if user.is_authenticated %}

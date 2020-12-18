@@ -164,3 +164,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # For django file browser
 FILEBROWSER_DIRECTORY = ''
 DIRECTORY = ''
+
+# Redirect to home URL after login/logout (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'

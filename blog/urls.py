@@ -11,6 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('posts.urls')),
     path('tinymce/', include('tinymce.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 if settings.DEBUG:

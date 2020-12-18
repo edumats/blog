@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% load static %}
 
+{% block title %}Posts{% endblock %}
 {% block content %}
 <div class="container">
     <div class="row">
@@ -17,7 +18,7 @@
                             <div class="date meta-last">{{ post.timestamp|date:"j M | Y"}}</div>
                             <div class="category">
                                 {% for category in post.categories.all %}
-                                    <a href="#">{{ category }}</a>
+                                    <a href="{{ category.get_absolute_url }}">{{ category }}</a>
                                 {% endfor %}
                             </div>
                         </div>

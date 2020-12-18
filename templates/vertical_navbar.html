@@ -39,7 +39,7 @@
         </header>
         {% for category in category_count %}
             <div class="item d-flex justify-content-between">
-                <a href="#">{{ category.categories__title}}</a><span>{{ category.categories__title__count}}</span>
+                <a href="{{ category.get_absolute_url }}">{{ category.categories__title}}</a><span>{{ category.categories__title__count}}</span>
             </div>
         {% endfor %}
     </div>

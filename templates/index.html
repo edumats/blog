@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
     <!-- Hero Section-->
@@ -26,7 +27,6 @@
     <section class="featured-posts no-padding-top">
       <div class="container">
         <!-- Post-->
-
         {% for post in posts %}
             <div class="row d-flex align-items-stretch">
                 {% if forloop.first or forloop.last %}
@@ -40,13 +40,15 @@
                           {% for category in post.categories.all %}
                             <a href="#">{{ category }}</a>
                           {% endfor %}
-                      </div><a href="post.html">
+                      </div><a href="{{ post.get_absolute_url }}">
                         <h2 class="h4">{{ post.title }}</h2></a>
                     </header>
-                    <p>{{ post.overview }}</p>
-                    <footer class="post-footer d-flex align-items-center"><a href="#" class="author d-flex align-items-center flex-wrap">
+                    <p>{{ post.overview|safe }}</p>
+                    <footer class="post-footer d-flex align-items-center">
+                      <a href="#" class="author d-flex align-items-center flex-wrap">
                         <div class="avatar"><img src="{{ post.author.profile_picture.url }}" alt="..." class="img-fluid"></div>
-                        <div class="title"><span>{{ post.author }}</span></div></a>
+                        <div class="title"><span>{{ post.author }}</span></div>
+                      </a>
                       <div class="date"><i class="icon-clock"></i> {{ post.timestamp|timesince }} ago</div>
                       <div class="comments"><i class="icon-comment"></i>{{ post.comment }}</div>
                     </footer>
@@ -82,7 +84,7 @@
                     </div>
                     </div><a href="post.html">
                     <h3 class="h4">{{ latest_post.title }}</h3></a>
-                    <p class="text-muted">{{ latest_post.overview }}</p>
+                    <p class="text-muted">{{ latest_post.overview|safe }}</p>
                     </div>
                 </div>
             {% endfor %}

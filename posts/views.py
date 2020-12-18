@@ -7,7 +7,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Post
+from .models import Post, Category
 from .forms import PostForm
 
 def get_category_count():
@@ -74,3 +74,18 @@ class SearchView(ListView):
         return Post.objects.filter(
             Q(title__icontains=query) | Q(overview__icontains=query) | Q(categories__title__icontains=query)
         ).distinct()
+
+class CategoryListView(ListView):
+    paginate_by = 10
+    model = Post
+    template_name = '../templates/posts_list_by_category.html'
+
+    def get_queryset(self):
+        return Post.objects.filter(categories__title=self.kwargs['category']).order_by('-timestamp')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['recent_posts'] = Post.objects.order_by('-timestamp')[:3]
+        context['category_count'] = get_category_count()
+        context['category'] = self.kwargs['category']
+        return context
