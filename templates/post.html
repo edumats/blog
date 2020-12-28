@@ -26,7 +26,8 @@
                     </div>
                 {% endif %}
                 <h1>{{ post.title }}<a href="#"><i class="fa fa-bookmark-o"></i></a></h1>
-                <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#" class="author d-flex align-items-center flex-wrap">
+                <div class="post-footer d-flex align-items-center flex-column flex-sm-row">
+                    <a href="{% url 'profile-detail' 'edumats' %}" class="author d-flex align-items-center flex-wrap">
                     <div class="avatar"><img src="{{ post.author.profile_picture.url }}" alt="..." class="img-fluid"></div>
                     <div class="title"><span>{{ post.author }}</span></div></a>
                   <div class="d-flex align-items-center flex-wrap">
@@ -39,7 +40,7 @@
                 </div>
                 <div class="post-tags">
                     {% for category in post.categories.all %}
-                        <a href="#" class="tag">#{{ category }}</a>
+                        <a href="{{ category.get_absolute_url }}" class="tag">#{{ category }}</a>
                     {% endfor %}
                 </div>
                 <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row"><a href="#" class="prev-post text-left d-flex align-items-center">

@@ -5,9 +5,9 @@ from django.conf.urls.static import static
 from django.contrib.sitemaps import GenericSitemap
 from django.contrib.sitemaps.views import sitemap
 
-from filebrowser.sites import site
-
 from posts.models import Post
+
+from filebrowser.sites import site
 
 # Queryset for sitemap
 info_dict = {
@@ -16,9 +16,9 @@ info_dict = {
 
 urlpatterns = [
     path('admin/filebrowser/', site.urls),
-    path('grappelli/', include('grappelli.urls')),
     path('admin/', admin.site.urls),
     path('', include('posts.urls')),
+    path('users/', include('users.urls')),
     path('tinymce/', include('tinymce.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('sitemap.xml', sitemap,

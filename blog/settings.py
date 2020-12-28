@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'g!1*k!1dp3pvy=bvk$@@r1ofw6e50nj+6hy884psvdyla**&q8')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = []
 
@@ -20,7 +20,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'grappelli',
     'filebrowser',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -30,11 +29,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'posts.apps.PostsConfig',
     'marketing.apps.MarketingConfig',
+    'users',
 
     'django.contrib.sites',
     'django.contrib.sitemaps',
     'tinymce',
     'crispy_forms',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -103,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
@@ -111,33 +112,75 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Path to venv
-VENV_PATH = os.path.dirname(BASE_DIR)
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'static'
+    BASE_DIR / 'static',
 ]
+
+# Path to venv
+VENV_PATH = os.path.dirname(BASE_DIR)
+
+# Path for collectstatic to store files
 STATIC_ROOT = os.path.join(VENV_PATH, 'static_root')
+
 
 # User uploaded files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(VENV_PATH, 'media_root')
 
-# TinyMCE configuration
+# For disqus
+DISQUS_API_KEY = os.environ.get('DISQUS_API_KEY')
+DISQUS_WEBSITE_SHORTNAME = os.environ.get('DISQUS_WEBSITE_SHORTNAME')
+
+# For crispy formats
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Redirect to home URL after login/logout (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'
+
+# For django.contrib.sites
+SITE_ID = 1
+
+# For AWS S3
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+
+# django-filebrowser uses this path to browser files
+DEFAULT_FILE_STORAGE = 'blog.s3_storages.MediaStorage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+
+MEDIAFILES_LOCATION = 'media_root'
+
+FILEBROWSER_DEFAULT_PERMISSIONS = None
+FILEBROWSER_LIST_PER_PAGE = 5  # Speeds up the load of the filebrowser files
+
+AWS_PRELOAD_METADATA = True     # Speeds up the load of the filebrowser files
+AWS_QUERYSTRING_AUTH = False    # Speeds up the load of the filebrowser files
+
+
+# For tinymce
 TINYMCE_DEFAULT_CONFIG = {
+    'height': 360,
+    'width': 1120,
     'cleanup_on_startup': True,
     'custom_undo_redo_levels': 20,
     'selector': 'textarea',
-    'theme': 'silver',
+    'theme': 'modern',
     'plugins': '''
             textcolor save link image media preview codesample contextmenu
             table code lists fullscreen  insertdatetime  nonbreaking
             contextmenu directionality searchreplace wordcount visualblocks
             visualchars code fullscreen autolink lists  charmap print  hr
-            anchor pagebreak spellchecker
+            anchor pagebreak
             ''',
     'toolbar1': '''
             fullscreen preview bold italic underline | fontselect,
@@ -152,25 +195,5 @@ TINYMCE_DEFAULT_CONFIG = {
     'contextmenu': 'formats | link image',
     'menubar': True,
     'statusbar': True,
-}
+    }
 
-TINYMCE_SPELLCHECKER = True
-#TINYMCE_COMPRESSOR = True
-
-# For disqus
-DISQUS_API_KEY = os.environ.get('DISQUS_API_KEY')
-DISQUS_WEBSITE_SHORTNAME = os.environ.get('DISQUS_WEBSITE_SHORTNAME')
-
-# For crispy formats
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
-# For django file browser
-FILEBROWSER_DIRECTORY = ''
-DIRECTORY = ''
-
-# Redirect to home URL after login/logout (Default redirects to /accounts/profile/)
-LOGIN_REDIRECT_URL = 'index'
-LOGOUT_REDIRECT_URL = 'index'
-
-# For django.contrib.sites
-SITE_ID = 1

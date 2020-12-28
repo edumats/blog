@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from tinymce.models import HTMLField
+from tinymce import HTMLField
 
 User = get_user_model()
 
@@ -11,6 +11,7 @@ class Author(models.Model):
 
     def __str__(self):
         return self.user.username
+
 
 class Category(models.Model):
     title = models.CharField(max_length=30)
@@ -27,6 +28,12 @@ class Category(models.Model):
         verbose_name = 'category'
         verbose_name_plural = 'categories'
 
+
+class Image(models.Model):
+    image = models.ImageField(upload_to='post_images/')
+    alt_tag = models.CharField(max_length=125, help_text='Describe the image in a specific manner')
+
+
 class Post(models.Model):
     # This title is used for page title and is limited to 60 chracters for better SEO
     title = models.CharField(max_length=60, help_text='Try placing important keywords first')
@@ -35,7 +42,7 @@ class Post(models.Model):
     content = HTMLField()
     timestamp = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    thumbnail = models.ImageField()
+    thumbnail = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True)
     categories = models.ManyToManyField(Category)
     featured = models.BooleanField(default=False)
 
@@ -56,3 +63,7 @@ class Post(models.Model):
         return reverse('post-delete', kwargs={
             'slug': self.slug
         })
+
+    def next_post(self):
+        next = Post.objects.get(pk=self.pk + 1)
+        return next.get_absolute_url()

@@ -38,14 +38,14 @@
                     <header class="post-header">
                       <div class="category">
                           {% for category in post.categories.all %}
-                            <a href="#">{{ category }}</a>
+                            <a href="{{ category.get_absolute_url }}">{{ category }}</a>
                           {% endfor %}
                       </div><a href="{{ post.get_absolute_url }}">
                         <h2 class="h4">{{ post.title }}</h2></a>
                     </header>
                     <p>{{ post.description|safe }}</p>
                     <footer class="post-footer d-flex align-items-center">
-                      <a href="#" class="author d-flex align-items-center flex-wrap">
+                      <a href="{% url 'profile-detail' 'edumats' %}" class="author d-flex align-items-center flex-wrap">
                         <div class="avatar"><img src="{{ post.author.profile_picture.url }}" alt="..." class="img-fluid"></div>
                         <div class="title"><span>{{ post.author }}</span></div>
                       </a>
@@ -101,12 +101,6 @@
           </div>
           <div class="col-md-8">
              <!-- Begin Mailchimp Signup Form -->
-             <link href="//cdn-images.mailchimp.com/embedcode/classic-10_7.css" rel="stylesheet" type="text/css">
-             <style type="text/css">
-               #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
-               /* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.
-                 We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
-             </style>
              <div id="mc_embed_signup">
                <form action="https://gmail.us7.list-manage.com/subscribe/post?u=c7334b92497cdad45bcd738f4&amp;id=dbd138849d" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
                    <div id="mc_embed_signup_scroll">

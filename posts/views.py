@@ -8,7 +8,6 @@ from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Post, Category
-from .forms import PostForm
 
 def get_category_count():
     queryset = Post.objects.values('categories__title').annotate(Count('categories__title'))
@@ -54,7 +53,7 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    form_class = PostForm
+    fields = '__all__'
     template_name = '../templates/post_create_form.html'
 
 class SearchView(ListView):
