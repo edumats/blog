@@ -14,7 +14,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'g!1*k!1dp3pvy=bvk$@@r1ofw6e50nj+6hy88
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['generic-blog.herokuapp.com']
 
 
 # Application definition
@@ -197,3 +197,7 @@ TINYMCE_DEFAULT_CONFIG = {
     'statusbar': True,
     }
 
+# Heroku: Update database configuration from $DATABASE_URL.
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
