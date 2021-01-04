@@ -7,7 +7,8 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Post, Category
+from .models import Author, Post, Category
+from .forms import CreatePostForm
 
 def get_category_count():
     queryset = Post.objects.values('categories__title').annotate(Count('categories__title'))
@@ -53,8 +54,14 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = '__all__'
+    form_class = CreatePostForm
     template_name = '../templates/post_create_form.html'
+
+    def form_valid(self, form):
+        current_user = Author.objects.get(user=self.request.user)
+        form.instance.author = current_user
+        return super().form_valid(form)
+
 
 class SearchView(ListView):
     paginate_by = 10
