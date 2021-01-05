@@ -14,7 +14,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'g!1*k!1dp3pvy=bvk$@@r1ofw6e50nj+6hy88
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['generic-blog.herokuapp.com']
+ALLOWED_HOSTS = ['generic-blog.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -116,7 +116,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-STATIC_URL = '/static/'
+STATIC_URL = 'https://personal-django-blogs.s3-sa-east-1.amazonaws.com/static_root/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
@@ -155,8 +155,8 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 
 # django-filebrowser uses this path to browser files
-DEFAULT_FILE_STORAGE = 'blog.s3_storages.MediaStorage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+#DEFAULT_FILE_STORAGE = 'blog.s3_storages.MediaStorage'
+#STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 
 MEDIAFILES_LOCATION = 'media_root'
 
