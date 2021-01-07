@@ -154,8 +154,8 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 
-# django-filebrowser uses this path to browser files
-DEFAULT_FILE_STORAGE = 'blog.s3_storages.MediaStorage'
+# Configuration used by django-storages
+# DEFAULT_FILE_STORAGE = 'blog.s3_storages.MediaStorage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 
 MEDIAFILES_LOCATION = 'media_root'
