@@ -14,10 +14,25 @@ def get_category_count():
     queryset = Post.objects.values('categories__title').annotate(Count('categories__title'))
     return queryset
 
+def latest_posts():
+    queryset = Post.objects.order_by('-timestamp')[:3]
+    return queryset
+
 def index(request):
     posts = Post.objects.filter(featured=True)[:3]
     latest_posts = Post.objects.order_by('-timestamp')[:3]
     return render(request, 'index.html', {'posts': posts, 'latest_posts': latest_posts})
+
+class IndexView(ListView):
+    model = Post
+    queryset = Post.objects.filter(featured=True)[:3]
+    template_name = 'index.html'
+    context_object_name = 'posts'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['latest_posts'] = latest_posts()
+        return context
 
 class PostListView(ListView):
     paginate_by = 4
@@ -28,7 +43,7 @@ class PostListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['recent_posts'] = Post.objects.order_by('-timestamp')[:3]
+        context['recent_posts'] = latest_posts()
         context['category_count'] = get_category_count()
         return context
 
@@ -38,7 +53,7 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['recent_posts'] = Post.objects.order_by('-timestamp')[:3]
+        context['recent_posts'] = latest_posts()
         context['category_count'] = get_category_count()
         return context
 
@@ -70,14 +85,14 @@ class SearchView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['recent_posts'] = Post.objects.order_by('-timestamp')[:3]
+        context['recent_posts'] = latest_posts()
         context['category_count'] = get_category_count()
         return context
 
     def get_queryset(self):
         query = self.request.GET.get('search')
         return Post.objects.filter(
-            Q(title__icontains=query) | Q(overview__icontains=query) | Q(categories__title__icontains=query)
+            Q(title__icontains=query) | Q(description__icontains=query) | Q(categories__title__icontains=query)
         ).distinct()
 
 class CategoryListView(ListView):
@@ -90,7 +105,7 @@ class CategoryListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['recent_posts'] = Post.objects.order_by('-timestamp')[:3]
+        context['recent_posts'] = latest_posts()
         context['category_count'] = get_category_count()
         context['category'] = self.kwargs['category']
         return context

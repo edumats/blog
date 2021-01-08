@@ -9,5 +9,5 @@ class ProfileDetailView(DetailView):
     template_name = 'profile_detail.html'
     
     def get_object(self):
-        current_user = User.objects.get(username=self.kwargs['user'])
+        current_user = User.objects.get(pk=1)
         return Profile.objects.get(user=current_user)

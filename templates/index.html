@@ -30,7 +30,7 @@
         {% for post in posts %}
             <div class="row d-flex align-items-stretch">
                 {% if forloop.first or forloop.last %}
-                  <div class="image col-lg-5"><img src="{{ post.thumbnail.image.url }}" alt="..."></div>
+                  <div class="image col-lg-5"><img src="{{ post.thumbnail.image.url }}" alt="{{ post.thumbnail.alt_tag }}"></div>
                 {% endif %}
               <div class="text col-lg-7">
                 <div class="text-inner d-flex align-items-center">
@@ -56,7 +56,7 @@
                 </div>
               </div>
               {% if not forloop.first and not forloop.last %}
-                <div class="image col-lg-5"><img src="{{ post.thumbnail.image.url }}" alt="..."></div>
+                <div class="image col-lg-5"><img src="{{ post.thumbnail.image.url }}" alt="{{ post.thumbnail.alt_tag }}"></div>
               {% endif %}
             </div>
         {% endfor %}
@@ -73,7 +73,7 @@
         <div class="row">
             {% for latest_post in latest_posts %}
                 <div class="post col-md-4">
-                    <div class="post-thumbnail"><a href="{{ latest_post.get_absolute_url }}"><img src="{{ latest_post.thumbnail.url }}" alt="..." class="img-fluid"></a></div>
+                    <div class="post-thumbnail"><a href="{{ latest_post.get_absolute_url }}"><img src="{{ latest_post.thumbnail.image.url }}" alt="{{ latest_post.thumbnail.alt_tag }}" class="img-fluid"></a></div>
                     <div class="post-details">
                       <div class="post-meta d-flex justify-content-between">
                         <div class="date">{{ latest_post.timestamp|date:"j M | Y" }}</div>

@@ -7,7 +7,7 @@
     <form action="{% url 'search' %}" class="search-form">
       <div class="form-group">
         <input type="search" name="search" placeholder="What are you looking for?">
-        <button type="submit" class="submit"><i class="icon-search"></i></button>
+        <button type="submit" class="submit"><i class="fas fa-search"></i></button>
       </div>
     </form>
 </div>
@@ -20,7 +20,7 @@
         {% for post in recent_posts %}
             <a href="{{ post.get_absolute_url }}">
                 <div class="item d-flex align-items-center">
-                    <div class="image"><img src="{{ post.thumbnail.url }}" alt="..." class="img-fluid"></div>
+                    <div class="image"><img src="{{ post.thumbnail.image.url }}" alt="{{ post.thumbnail.alt_tag }}" class="img-fluid"></div>
                     <div class="title"><strong>{{ post.title }}</strong>
                         <div class="d-flex align-items-center">
                             <div class="comments">

@@ -27,10 +27,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'posts.apps.PostsConfig',
-    'marketing.apps.MarketingConfig',
+    'posts',
+    'marketing',
     'users',
-
     'django.contrib.sites',
     'django.contrib.sitemaps',
     'tinymce',
@@ -116,7 +115,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-STATIC_URL = 'https://personal-django-blogs.s3-sa-east-1.amazonaws.com/static_root/'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
@@ -154,11 +153,16 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 
+# Base location for static files stores in S3
+STATIC_URL = 'https://personal-django-blogs.s3-sa-east-1.amazonaws.com/'
+
 # Configuration used by django-storages
 DEFAULT_FILE_STORAGE = 'blog.s3_storages.MediaStorage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 
 MEDIAFILES_LOCATION = 'media_root'
+
+AWS_LOCATION = 'static_root'
 
 FILEBROWSER_DEFAULT_PERMISSIONS = None
 FILEBROWSER_LIST_PER_PAGE = 5  # Speeds up the load of the filebrowser files
