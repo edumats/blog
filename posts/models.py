@@ -36,6 +36,9 @@ class Image(models.Model):
     def __str__(self):
         return self.alt_tag
 
+def get_default_author():
+    return Author.objects.get_or_create(id=1)[0]
+
 class Post(models.Model):
     # This title is used for page title and is limited to 60 chracters for better SEO
     title = models.CharField(max_length=60, help_text='Try placing important keywords first')
@@ -43,7 +46,7 @@ class Post(models.Model):
     description = models.CharField(max_length=160, help_text='Description of your post')
     content = HTMLField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, default=get_default_author, on_delete=models.CASCADE)
     thumbnail = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
     categories = models.ManyToManyField(Category, blank=True)
     featured = models.BooleanField(default=False)

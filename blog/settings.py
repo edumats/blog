@@ -162,7 +162,7 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 
 MEDIAFILES_LOCATION = 'media_root'
 
-AWS_LOCATION = 'static_root'
+""" AWS_LOCATION = 'static_root' """
 
 FILEBROWSER_DEFAULT_PERMISSIONS = None
 FILEBROWSER_LIST_PER_PAGE = 5  # Speeds up the load of the filebrowser files
@@ -202,6 +202,6 @@ TINYMCE_DEFAULT_CONFIG = {
     }
 
 # Heroku: Update database configuration from $DATABASE_URL.
-import dj_database_url
+""" import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
+DATABASES['default'].update(db_from_env) """

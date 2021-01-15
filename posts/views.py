@@ -7,8 +7,9 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Author, Post, Category
-from .forms import CreatePostForm
+
+from .models import Author, Post, Category, Image
+from .forms import CreatePostForm, UploadImage
 
 def get_category_count():
     queryset = Post.objects.values('categories__title').annotate(Count('categories__title'))
@@ -76,6 +77,15 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         current_user = Author.objects.get(user=self.request.user)
         form.instance.author = current_user
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        """ from django.forms import modelform_factory
+        ImageFormSet = modelform_factory(Image, fields=('image', 'alt_tag')) """
+        from django.forms.models import inlineformset_factory
+        ImageFormSet = inlineformset_factory(Image, Post, fields=('title', ))
+        context['upload_image'] = ImageFormSet
+        return context
 
 
 class SearchView(ListView):
