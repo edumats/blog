@@ -160,6 +160,7 @@ STATIC_URL = 'https://personal-django-blogs.s3-sa-east-1.amazonaws.com/'
 DEFAULT_FILE_STORAGE = 'blog.s3_storages.MediaStorage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 
+# Directory where uploaded file will be saved
 MEDIAFILES_LOCATION = 'media_root'
 
 """ AWS_LOCATION = 'static_root' """
@@ -205,3 +206,8 @@ TINYMCE_DEFAULT_CONFIG = {
 import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
+
+# Uses sqlite when running tests
+import sys
+if 'test' in sys.argv:
+    DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}

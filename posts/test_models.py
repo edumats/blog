@@ -1,37 +1,61 @@
+from base64 import b64decode
+
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.files.base import ContentFile
 from django.contrib.auth.models import User
+from io import BytesIO
+from PIL import Image as PIL_IMAGE
+from django.core.files.base import File
 
 from .models import Author, Category, Image, Post 
 
 class PostTestCase(TestCase):
+    @staticmethod
+    def get_image_file(name='test_image.png', ext='png', size=(50, 50), color=(256, 0, 0)):
+        file_obj = BytesIO()
+        image = PIL_IMAGE.new("RGBA", size=size, color=color)
+        image.save(file_obj, ext)
+        file_obj.seek(0)
+        return File(file_obj, name=name)
+
     def setUp(self):
         self.user = User.objects.create(username='Test User', email='testuser@test.com', password='testuser123')
-        test_author = Author.objects.create(
-            user=self.user,
-            profile_picture= SimpleUploadedFile('test_image_profile.jpg', content=open('static/img/avatar-1.jpg', 'rb').read(), content_type='image/jpeg')
-        )
+        self.author = Author()
+        self.author.user = self.user
+        self.author.profile_picture = 'profile_images/image_profile.jpg'
+        self.author.save()
 
-        test_image = Image.objects.create(
-            image = SimpleUploadedFile('test_image.jpg', content=open('static/img/avatar-1.jpg', 'rb').read(), content_type='image/jpeg'),
-            alt_tag = 'test image'
-        )
+        self.image = Image()
+        self.image.image = '/post_images/Eggplant_Parm.jpg'
+        self.image.alt_tag = 'test image'
+        self.image.save()
 
-        test_category1 = Category.objects.create(title='Test Category 1')
-        test_category2 = Category.objects.create(title='Test Category 2')
-        test_category3 = Category.objects.create(title='Test Category 3')
+        self.category1 = Category.objects.create(title='Test Category 1')
+        self.category2 = Category.objects.create(title='Test Category 2')
+        self.category3 = Category.objects.create(title='Test Category 3')
 
-        test_post1 = Post.objects.create(
+        self.post1 = Post.objects.create(
             title='Test1', 
-            slug='test1', 
             description='Testing a post', 
             content='<h1>This is a test</h1> <p>Testing 1, 2, 3</p>',
-            author = test_author,
-            thumbnail = test_image,
+            author = self.author,
+            thumbnail = self.image,
             featured = True
         )
-        test_post1.categories.add(test_category1, test_category2, test_category3)
+        self.post1.categories.add(self.category1, self.category2, self.category3)
     
+    def test_author_methods(self):
+        self.assertEqual(str(self.author), 'Test User')
+
+    def test_category_methods(self):
+        self.assertEqual(str(self.category1), 'Test Category 1')
+        self.assertEqual(self.category1.get_absolute_url(), '/category/test-category-1')
+
+    def test_image_methods(self):
+        self.assertEqual(str(self.image), '/post_images/Eggplant_Parm.jpg')
+
     def test_post_methods(self):
-        post1 = Post.objects.get(title='Test1')
-        self.assertEqual(post1.__str__(), 'Test1')
+        self.assertEqual(str(self.post1), 'Test1')
+        self.assertEqual(self.post1.get_absolute_url(), '/post/test1')
+        self.assertEqual(self.post1.get_update_url(), '/post/test1/update')

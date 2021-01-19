@@ -19,11 +19,6 @@ def latest_posts():
     queryset = Post.objects.order_by('-timestamp')[:3]
     return queryset
 
-def index(request):
-    posts = Post.objects.filter(featured=True)[:3]
-    latest_posts = Post.objects.order_by('-timestamp')[:3]
-    return render(request, 'index.html', {'posts': posts, 'latest_posts': latest_posts})
-
 class IndexView(ListView):
     model = Post
     queryset = Post.objects.filter(featured=True)[:3]
