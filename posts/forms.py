@@ -9,12 +9,17 @@ class UploadImage(forms.ModelForm):
         model = Image
         fields = ['image', 'alt_tag']
 
+class CreateCategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['title']
+
 class CreatePostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'slug', 'description', 'content', 'thumbnail', 'categories', 'featured']
+        fields = ['title', 'description', 'content', 'thumbnail', 'categories', 'featured']
         widgets = {
             'thumbnail': RelatedFieldWidgetCanAdd(Image),
-            'categories': RelatedFieldWidgetCanAdd(Category)
+            'categories': forms.CheckboxSelectMultiple()
         }
 

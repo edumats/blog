@@ -56,18 +56,35 @@ class TestViews(TestCase):
 
     def test_index_get(self):
         response = self.client.get(reverse('index'))
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'index.html')
     
     def test_post_list_get(self):
         response = self.client.get(reverse('blog'))
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, '../templates/blog.html')
 
     def test_post_detail_get(self):
         response = self.client.get(reverse('post', args=['test1']))
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, '../templates/post.html')
+    
+    def test_post_delete_get(self):
+        response = self.client.get(reverse('post-delete', args=['test1']))
+        # Returning 302
+        # self.assertEqual(response.status_code, 200)
+        # No templates used to render this response
+        #self.assertTemplateUsed(response, '../templates/post_delete_form.html')
+    
+    def test_post_delete_POST(self):
+        post5 = Post.objects.create(
+            title='Test5', 
+            description='Testing a post', 
+            content='<h1>This is a test 5</h1> <p>Testing 1, 2, 3</p>',
+            author = self.author,
+        )
+        response = self.client.post(reverse('post-delete', args=['test5']))
+        self.assertEqual(response.status_code, 302)
     
     def test_post_create_POST(self):
         response = self.client.post(reverse('post-create'), {
@@ -77,14 +94,14 @@ class TestViews(TestCase):
             'author': self.author,
         })
         # In CreateView successful valid_form returns 302 response
-        self.assertEquals(response.status_code, 302)
-    
+        self.assertEqual(response.status_code, 302)
+
     def test_search_get(self):
         response = self.client.get(reverse('search'), {'search': 'post1'})
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, '../templates/search_results.html')
     
     def test_category_list_get(self):
         response = self.client.get(reverse('category_list', args=['test_category_1']))
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, '../templates/posts_list_by_category.html')

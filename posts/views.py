@@ -1,15 +1,16 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.db.models import Count, Q
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import UpdateView, DeleteView, CreateView
+from django.views.generic.edit import UpdateView, DeleteView, CreateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.utils.text import slugify
+from django.http import HttpResponseRedirect
 
 from .models import Author, Post, Category, Image
-from .forms import CreatePostForm, UploadImage
+from .forms import CreatePostForm, CreateCategoryForm
 
 def get_category_count():
     queryset = Post.objects.values('categories__title').annotate(Count('categories__title'))
@@ -71,15 +72,16 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         current_user = Author.objects.get(user=self.request.user)
         form.instance.author = current_user
+        form.instance.slug = slugify(form.instance.title)
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print(form.errors)
+        return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        """ from django.forms import modelform_factory
-        ImageFormSet = modelform_factory(Image, fields=('image', 'alt_tag')) """
-        from django.forms.models import inlineformset_factory
-        ImageFormSet = inlineformset_factory(Image, Post, fields=('title', ))
-        context['upload_image'] = ImageFormSet
+        context['create_category'] = CreateCategoryForm
         return context
 
 
@@ -98,7 +100,7 @@ class SearchView(ListView):
         query = self.request.GET.get('search')
         return Post.objects.filter(
             Q(title__icontains=query) | Q(description__icontains=query) | Q(categories__title__icontains=query)
-        ).distinct()
+        ).distinct().order_by('-timestamp')
 
 class CategoryListView(ListView):
     paginate_by = 10
@@ -114,3 +116,13 @@ class CategoryListView(ListView):
         context['category_count'] = get_category_count()
         context['category'] = self.kwargs['category']
         return context
+
+def CreateCategoryView(request):
+    print('hi')
+    if request.method == 'POST':
+        print('posted')
+        form = CreateCategoryForm(request.POST)
+        if form.is_valid():
+            print('form is valid')
+            form.save()
+            return HttpResponseRedirect(reverse('post-create'))

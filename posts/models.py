@@ -78,3 +78,6 @@ class Post(models.Model):
     def next_post(self):
         next = Post.objects.get(pk=self.pk + 1)
         return next.get_absolute_url()
+
+    def Meta(self):
+        ordering = ['-timestamp']

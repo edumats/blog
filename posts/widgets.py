@@ -3,6 +3,7 @@ from django.utils.safestring import mark_safe
 from django.forms import widgets
 from django.conf import settings
 
+# Adds a link for adding related objects
 class RelatedFieldWidgetCanAdd(widgets.Select):
 
     def __init__(self, related_model, related_url=None, *args, **kw):
