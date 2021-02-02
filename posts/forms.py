@@ -2,7 +2,7 @@ from django import forms
 from django.forms.models import inlineformset_factory
 
 from .models import Post, Image, Category
-from .widgets import RelatedFieldWidgetCanAdd
+from .form_select_override import SelectWithPop, MultipleSelectWithPop
 
 class UploadImage(forms.ModelForm):
     class Meta:
@@ -19,7 +19,6 @@ class CreatePostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'description', 'content', 'thumbnail', 'categories', 'featured']
         widgets = {
-            'thumbnail': RelatedFieldWidgetCanAdd(Image),
-            'categories': forms.CheckboxSelectMultiple()
+            'thumbnail': SelectWithPop(),
+            'categories': MultipleSelectWithPop()
         }
-

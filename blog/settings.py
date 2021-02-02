@@ -179,10 +179,9 @@ TINYMCE_DEFAULT_CONFIG = {
     'custom_undo_redo_levels': 20,
     'selector': 'textarea',
     'theme': 'modern',
-    'width': '70vw',
-    'height': '100vh',
+    'width': '100%',
     'plugins': '''
-            textcolor save link image media preview codesample contextmenu
+            autoresize textcolor save link image media preview codesample contextmenu
             table code lists fullscreen  insertdatetime  nonbreaking
             contextmenu directionality searchreplace wordcount visualblocks
             visualchars code fullscreen autolink lists  charmap print  hr

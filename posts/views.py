@@ -7,10 +7,10 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView, DeleteView, CreateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.text import slugify
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 
 from .models import Author, Post, Category, Image
-from .forms import CreatePostForm, CreateCategoryForm
+from .forms import CreatePostForm, CreateCategoryForm, UploadImage
 
 def get_category_count():
     queryset = Post.objects.values('categories__title').annotate(Count('categories__title'))
@@ -118,7 +118,6 @@ class CategoryListView(ListView):
         return context
 
 def CreateCategoryView(request):
-    print('hi')
     if request.method == 'POST':
         print('posted')
         form = CreateCategoryForm(request.POST)
@@ -126,3 +125,30 @@ def CreateCategoryView(request):
             print('form is valid')
             form.save()
             return HttpResponseRedirect(reverse('post-create'))
+
+
+from django.utils.html import escape
+def handlePopAdd(request, addForm, field):
+    if request.method == "POST":
+        form = addForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                newObject = form.save()
+            except ValidationError:
+                newObject = None
+            if newObject:
+                return HttpResponse('<script type="text/javascript">opener.dismissAddRelatedObjectPopup(window, "%s", "%s");</script>' % \
+                    (escape(newObject._get_pk_val()), escape(newObject)))
+    else:
+        form = addForm()
+    pageContext = {'form': form, 'field': field}
+    return render(request, "form/formpopup.html", pageContext)
+
+
+from django.contrib.auth.decorators import login_required
+@login_required
+def newImage(request):
+    return handlePopAdd(request, UploadImage, 'thumbnail')
+@login_required
+def newCategory(request):
+    return handlePopAdd(request, CreateCategoryForm, 'categories')
