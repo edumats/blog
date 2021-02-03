@@ -1,5 +1,4 @@
 {% extends 'layout.html' %}
-{% load static %}
 {% load crispy_forms_tags %}
 
 {% block meta%}
@@ -36,9 +35,13 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form method="post" action="{% url 'category-create' %}" id="category-form">
-                    {% crispy create_category %}
-                  </form>
+                    <form method="POST" action="/add/{{ field }}/" enctype="multipart/form-data">
+                        <table>
+                            {% csrf_token %}
+                            {% crispy form %}
+                        </table>
+                        <p><input class="btn btn-primary" type="submit" value="Add to {{ field }}" /> | <a class="btn btn-danger" href="javascript:window.close()">Cancel</a></p>
+                    </form>
                   <div class="modal-footer">
                     <button type="submit" form="category-form" class="btn btn-primary">Save</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -51,73 +54,49 @@
       </div>
     </div>
     <script type="text/javascript">
-    function showPopup(triggeringLink) {
-        return showAdminPopup(triggeringLink, /^(change|add|delete)_/, false);
-    }
+        function showPopup(triggeringLink) {
+            return showAdminPopup(triggeringLink, /^(change|add|delete)_/, false);
+        }
 
-    function showAdminPopup(triggeringLink, name_regexp, add_popup) {
-        const name = triggeringLink.id.replace(name_regexp, '');
-        let href = triggeringLink.href;
-        if (add_popup) {
-            if (href.indexOf('?') === -1) {
-                href += '?_popup=1';
+        function showAdminPopup(triggeringLink, name_regexp, add_popup) {
+            const name = triggeringLink.id.replace(name_regexp, '');
+            let href = triggeringLink.href;
+            if (add_popup) {
+                if (href.indexOf('?') === -1) {
+                    href += '?_popup=1';
+                } else {
+                    href += '&_popup=1';
+                }
+            }
+            const win = window.open(href, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
+            win.focus();
+            return false;
+        }
+
+
+        function dismissAddRelatedObjectPopup(win, newId, newRepr) {
+            const name = win.name;
+            const elem = document.getElementById(name);
+            if (elem) {
+                const elemName = elem.nodeName.toUpperCase();
+                if (elemName === 'SELECT') {
+                    elem.options[elem.options.length] = new Option(newRepr, newId, true, true);
+                } else if (elemName === 'INPUT') {
+                    if (elem.classList.contains('vManyToManyRawIdAdminField') && elem.value) {
+                        elem.value += ',' + newId;
+                    } else {
+                        elem.value = newId;
+                    }
+                }
+                // Trigger a change event to update related links if required.
+                $(elem).trigger('change');
             } else {
-                href += '&_popup=1';
+                const toId = name + "_to";
+                const o = new Option(newRepr, newId);
+                SelectBox.add_to_cache(toId, o);
+                SelectBox.redisplay(toId);
             }
+            win.close();
         }
-        const win = window.open(href, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
-        win.focus();
-        return false;
-    }
-
-    function dismissAddRelatedObjectPopup(win, newId, newRepr) {
-        const name = win.name;
-        const elem = document.getElementById(name);
-        if (elem) {
-            const elemName = elem.nodeName.toUpperCase();
-            if (elemName === 'SELECT') {
-                elem.options[elem.options.length] = new Option(newRepr, newId, true, true);
-            } else if (elemName === 'INPUT') {
-                if (elem.classList.contains('vManyToManyRawIdAdminField') && elem.value) {
-                    elem.value += ',' + newId;
-                } else {
-                    elem.value = newId;
-                }
-            }
-            // Trigger a change event to update related links if required.
-            $(elem).trigger('change');
-        } else {
-            const toId = name + "_to";
-            const o = new Option(newRepr, newId);
-            SelectBox.add_to_cache(toId, o);
-            SelectBox.redisplay(toId);
-        }
-        win.close();
-    }
-
-    function dismissAddRelatedObjectPopup(win, newId, newRepr) {
-        const name = win.name;
-        const elem = document.getElementById(name);
-        if (elem) {
-            const elemName = elem.nodeName.toUpperCase();
-            if (elemName === 'SELECT') {
-                elem.options[elem.options.length] = new Option(newRepr, newId, true, true);
-            } else if (elemName === 'INPUT') {
-                if (elem.classList.contains('vManyToManyRawIdAdminField') && elem.value) {
-                    elem.value += ',' + newId;
-                } else {
-                    elem.value = newId;
-                }
-            }
-            // Trigger a change event to update related links if required.
-            $(elem).trigger('change');
-        } else {
-            const toId = name + "_to";
-            const o = new Option(newRepr, newId);
-            SelectBox.add_to_cache(toId, o);
-            SelectBox.redisplay(toId);
-        }
-        win.close();
-    }
     </script>
 {% endblock %}
